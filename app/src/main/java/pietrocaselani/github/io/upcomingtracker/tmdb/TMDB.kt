@@ -1,10 +1,10 @@
 package pietrocaselani.github.io.upcomingtracker.tmdb
 
-import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import com.squareup.moshi.Moshi
 import okhttp3.OkHttpClient
+import pietrocaselani.github.io.upcomingtracker.tmdb.services.Configuration
+import pietrocaselani.github.io.upcomingtracker.tmdb.services.Movies
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 
 class TMDB private constructor(builder: TMDB.Builder) {
     companion object {
@@ -16,26 +16,44 @@ class TMDB private constructor(builder: TMDB.Builder) {
     private val retrofit: Retrofit
 
     init {
-        val apiKey = builder.apiKey ?: throw IllegalArgumentException("apiKey can't be null")
-        val client = builder.client ?: OkHttpClient.Builder().addInterceptor(TMDBAPIKeyInterceptor(apiKey)).build()
-
-        val moshi = builder.moshi ?: Moshi.Builder().build()
-        val moshiConverter = MoshiConverterFactory.create(moshi)
+        val apiKey = builder.apiKey
+        val client = builder.client.newBuilder().addInterceptor(TMDBAPIKeyInterceptor(apiKey)).build()
 
         retrofit = Retrofit.Builder().baseUrl(API_URL)
                 .client(client)
-                .addConverterFactory(moshiConverter)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
     }
 
-    class Builder {
-        var client: OkHttpClient? = null
-        var apiKey: String? = null
-        var moshi: Moshi? = null
+    fun configuration(): Configuration {
+        return retrofit.create(Configuration::class.java)
+    }
 
-        fun build() {
-            TMDB(builder = this)
+    fun movies(): Movies {
+        return retrofit.create(Movies::class.java)
+    }
+
+    class Builder {
+        internal lateinit var client: OkHttpClient
+        internal lateinit var apiKey: String
+        internal lateinit var moshi: Moshi
+
+        fun client(client: OkHttpClient): Builder {
+            this.client = client
+            return this
+        }
+
+        fun apiKey(apiKey: String): Builder {
+            this.apiKey = apiKey
+            return this
+        }
+
+        fun moshi(moshi: Moshi): Builder {
+            this.moshi = moshi
+            return this
+        }
+
+        fun build(): TMDB {
+            return TMDB(builder = this)
         }
     }
 }
