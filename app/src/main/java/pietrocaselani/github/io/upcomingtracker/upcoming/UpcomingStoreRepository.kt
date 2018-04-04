@@ -34,14 +34,15 @@ class UpcomingStoreRepository(private val moviesStore: Store<PagedResponse, BarC
         val urlBuilder = HttpUrl.parse(configuration.images.secure_base_url)!!
                 .newBuilder()
                 .addPathSegment(PosterImageSize.W185.name.toLowerCase())
+                .build()
 
         return pagedResponse.results.map {
             val posterLink = it.poster_path?.let {
-                urlBuilder.addPathSegment(it).build().toString()
+                urlBuilder.newBuilder().addPathSegment(it).build().toString()
             }
 
             val backdropLink = it.backdrop_path?.let {
-                urlBuilder.addPathSegment(it).build().toString()
+                urlBuilder.newBuilder().addPathSegment(it).build().toString()
             }
 
             Movie(it.id,

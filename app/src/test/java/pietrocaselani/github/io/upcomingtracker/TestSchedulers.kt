@@ -5,8 +5,8 @@ import io.reactivex.internal.schedulers.TrampolineScheduler
 
 class TestSchedulers: Schedulers {
     override val mainScheduler: Scheduler
-        get() = TrampolineScheduler.instance()
+        get() = io.reactivex.schedulers.Schedulers.trampoline()
     override val ioScheduler: Scheduler
-        get() = TrampolineScheduler.instance()
+        get() = io.reactivex.schedulers.Schedulers.trampoline()
 
 }
