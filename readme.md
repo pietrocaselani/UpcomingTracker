@@ -24,10 +24,6 @@ on `$HOME/.gradle/gradle.properties`
 * NYTimes Store - Async Repository implementation for data loading and cache
 * AAC - To help implement MVVM handling lifecycles
 
-## Translations
-
-You can help translate the app [here](https://localise.biz/pietro-caselani/moviestracker)
-
 ## Author
 
 Pietro Caselani, pc1992@gmail.com
