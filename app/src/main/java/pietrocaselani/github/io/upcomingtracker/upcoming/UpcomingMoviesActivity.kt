@@ -27,7 +27,7 @@ class UpcomingMoviesActivity : AppCompatActivity() {
         viewModel = ViewModelFactory.create(UpcomingMoviesViewModel::class.java)
 
         viewModel.viewState.observe(this, Observer {
-            val viewState = it ?: Loading()
+            val viewState = it ?: Loading
             updateView(viewState)
         })
     }

@@ -15,11 +15,11 @@ class UpcomingMoviesViewModel(private val repository: UpcomingMoviesRepository,
         val disposable = repository.fetchMovies(page = 1)
                 .observeOn(schedulers.mainScheduler)
                 .doOnSubscribe {
-                    viewState.value = UpcomingMoviesViewState.Loading()
+                    viewState.value = UpcomingMoviesViewState.Loading
                 }
                 .subscribe({
                     if (it.isEmpty()) {
-                        viewState.value = UpcomingMoviesViewState.Unavailable()
+                        viewState.value = UpcomingMoviesViewState.Unavailable
                     } else {
                         viewState.value = UpcomingMoviesViewState.Available(it)
                     }
