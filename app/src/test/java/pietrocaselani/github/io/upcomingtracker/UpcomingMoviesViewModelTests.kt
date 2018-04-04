@@ -1,8 +1,7 @@
 package pietrocaselani.github.io.upcomingtracker
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.Lifecycle.Event.*
+import android.arch.lifecycle.Lifecycle.Event.ON_RESUME
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
@@ -13,7 +12,6 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito
-import org.mockito.Mockito.mock
 import org.mockito.Mockito.verify
 import org.mockito.junit.MockitoJUnitRunner
 import pietrocaselani.github.io.upcomingtracker.upcoming.UpcomingMoviesRepository
