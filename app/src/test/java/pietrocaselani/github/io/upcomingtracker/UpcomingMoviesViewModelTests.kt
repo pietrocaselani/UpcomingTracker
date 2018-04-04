@@ -2,6 +2,7 @@ package pietrocaselani.github.io.upcomingtracker
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.Lifecycle.Event.*
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.Observer
@@ -50,7 +51,7 @@ class UpcomingMoviesViewModelTests {
     @Test
     fun when_viewmodel_starts_state_should_be_loading_and_then_unavailable() {
         //Given
-        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        lifecycle.handleLifecycleEvent(ON_RESUME)
         Mockito.`when`(repository.fetchMovies(1)).thenReturn(Single.just(emptyList()))
 
         //When
@@ -66,7 +67,7 @@ class UpcomingMoviesViewModelTests {
     @Test
     fun when_there_is_no_movies_available_state_should_be_unavailable() {
         //Given
-        lifecycle.handleLifecycleEvent(Lifecycle.Event.ON_RESUME)
+        lifecycle.handleLifecycleEvent(ON_RESUME)
         Mockito.`when`(repository.fetchMovies(1)).thenReturn(Single.just(emptyList()))
 
         //When
@@ -75,5 +76,33 @@ class UpcomingMoviesViewModelTests {
 
         //Then
         verify(observer).onChanged(UpcomingMoviesViewState.Unavailable)
+    }
+
+    @Test fun when_repository_emits_error_state_should_be_error() {
+        //Given
+        lifecycle.handleLifecycleEvent(ON_RESUME)
+        val errorMessage = "There is no internet connection"
+        Mockito.`when`(repository.fetchMovies(1)).thenReturn(Single.error(Exception(errorMessage)))
+
+        //When
+        viewModel.viewState.observeForever(observer)
+        viewModel.start()
+
+        //Then
+        verify(observer).onChanged(UpcomingMoviesViewState.Error(errorMessage))
+    }
+
+    @Test fun when_repository_emits_movies_state_should_be_movies_available() {
+        //Given
+        lifecycle.handleLifecycleEvent(ON_RESUME)
+        val movies = listOf(movieMock(), movieMock(id = 10), movieMock(id = 30))
+        Mockito.`when`(repository.fetchMovies(1)).thenReturn(Single.just(movies))
+
+        //When
+        viewModel.viewState.observeForever(observer)
+        viewModel.start()
+
+        //Then
+        verify(observer).onChanged(UpcomingMoviesViewState.Available(movies))
     }
 }
