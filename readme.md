@@ -23,6 +23,7 @@ on `$HOME/.gradle/gradle.properties`
 * Retrofit 2 - To abstract network layer
 * NYTimes Store - Async Repository implementation for data loading and cache
 * AAC - To help implement MVVM handling lifecycles
+* Picasso - To easily load web images
 
 ## Author
 
