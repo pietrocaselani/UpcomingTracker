@@ -1,6 +1,6 @@
 package pietrocaselani.github.io.upcomingtracker.tmdb
 
-import com.squareup.moshi.Moshi
+import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import okhttp3.OkHttpClient
 import pietrocaselani.github.io.upcomingtracker.tmdb.services.Configuration
 import pietrocaselani.github.io.upcomingtracker.tmdb.services.Movies
@@ -21,6 +21,7 @@ class TMDB private constructor(builder: TMDB.Builder) {
 
         retrofit = Retrofit.Builder().baseUrl(API_URL)
                 .client(client)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
     }
 
@@ -35,7 +36,6 @@ class TMDB private constructor(builder: TMDB.Builder) {
     class Builder {
         internal lateinit var client: OkHttpClient
         internal lateinit var apiKey: String
-        internal lateinit var moshi: Moshi
 
         fun client(client: OkHttpClient): Builder {
             this.client = client
@@ -44,11 +44,6 @@ class TMDB private constructor(builder: TMDB.Builder) {
 
         fun apiKey(apiKey: String): Builder {
             this.apiKey = apiKey
-            return this
-        }
-
-        fun moshi(moshi: Moshi): Builder {
-            this.moshi = moshi
             return this
         }
 

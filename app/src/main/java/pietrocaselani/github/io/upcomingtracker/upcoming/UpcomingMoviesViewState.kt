@@ -7,4 +7,5 @@ sealed class UpcomingMoviesViewState {
     data class Available(val movies: List<Movie>) : UpcomingMoviesViewState()
     object Unavailable : UpcomingMoviesViewState()
     data class Error(val message: String) : UpcomingMoviesViewState()
+    data class ShowDetails(val movie: Movie) : UpcomingMoviesViewState()
 }

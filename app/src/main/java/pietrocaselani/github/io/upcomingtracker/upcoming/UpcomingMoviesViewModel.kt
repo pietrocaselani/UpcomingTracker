@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
 import pietrocaselani.github.io.upcomingtracker.Schedulers
+import pietrocaselani.github.io.upcomingtracker.entities.Movie
 
 class UpcomingMoviesViewModel(private val repository: UpcomingMoviesRepository,
                               private val schedulers: Schedulers) : ViewModel() {
@@ -29,5 +30,14 @@ class UpcomingMoviesViewModel(private val repository: UpcomingMoviesRepository,
 
 
         compositeDisposable.add(disposable)
+    }
+
+    fun select(movie: Movie) {
+        viewState.postValue(UpcomingMoviesViewState.ShowDetails(movie))
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
     }
 }

@@ -14,7 +14,8 @@ import pietrocaselani.github.io.upcomingtracker.upcoming.UpcomingMoviesAdapter.M
 import java.text.SimpleDateFormat
 import java.util.*
 
-class UpcomingMoviesAdapter(private val movies: MutableList<Movie> = mutableListOf()): RecyclerView.Adapter<MovieViewHolder>() {
+class UpcomingMoviesAdapter(private val movies: MutableList<Movie> = mutableListOf(),
+                            private val movieSelectedListener: (movie: Movie) -> Unit): RecyclerView.Adapter<MovieViewHolder>() {
     private val dateFormatter = SimpleDateFormat("dd MMM yy", Locale.getDefault())
     private val picasso = Picasso.get()
 
@@ -46,6 +47,9 @@ class UpcomingMoviesAdapter(private val movies: MutableList<Movie> = mutableList
 
         holder?.titleTextView?.text = movie.title
         holder?.detailTextView?.text = detailText
+        holder?.itemView?.setOnClickListener {
+            movieSelectedListener(movie)
+        }
     }
 
     class MovieViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {

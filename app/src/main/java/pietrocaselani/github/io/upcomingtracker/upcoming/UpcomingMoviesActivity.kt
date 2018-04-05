@@ -1,21 +1,24 @@
 package pietrocaselani.github.io.upcomingtracker.upcoming
 
 import android.arch.lifecycle.Observer
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import kotlinx.android.synthetic.main.activity_upcoming_movies.*
 import pietrocaselani.github.io.upcomingtracker.R
 import pietrocaselani.github.io.upcomingtracker.ViewModelFactory
+import pietrocaselani.github.io.upcomingtracker.details.DetailsActivity
 import pietrocaselani.github.io.upcomingtracker.entities.Movie
 import pietrocaselani.github.io.upcomingtracker.upcoming.UpcomingMoviesViewState.*
 
 class UpcomingMoviesActivity : AppCompatActivity() {
 
     private lateinit var viewModel: UpcomingMoviesViewModel
-    private val adapter = UpcomingMoviesAdapter()
+    private val adapter = UpcomingMoviesAdapter(movieSelectedListener = {
+        viewModel.select(it)
+    })
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +47,14 @@ class UpcomingMoviesActivity : AppCompatActivity() {
             is Available -> showMovies(viewState.movies)
             is Unavailable -> showEmptyView()
             is Error -> showError(viewState.message)
+            is ShowDetails -> showDetails(viewState.movie)
         }
+    }
+
+    private fun showDetails(movie: Movie) {
+        val intent = Intent(this, DetailsActivity::class.java)
+        intent.putExtra(Movie.PARCELABLE_KEY, movie)
+        startActivity(intent)
     }
 
     private fun showMovies(movies: List<Movie>) {
@@ -57,7 +67,7 @@ class UpcomingMoviesActivity : AppCompatActivity() {
 
     private fun showEmptyView() {
         upcomingMoviesTextView.visibility = View.VISIBLE
-        upcomingMoviesTextView.text = "Nenhum filme no momento"
+        upcomingMoviesTextView.text = getString(R.string.no_movies_right_now)
         upcomingMoviesProgressBar.visibility = View.GONE
         upcomingMoviesRecyclerView.visibility = View.GONE
     }

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">UpcomingTracker</string>
+    <string name="no_movies_right_now">Nenhum filme no momento</string>
+</resources>
