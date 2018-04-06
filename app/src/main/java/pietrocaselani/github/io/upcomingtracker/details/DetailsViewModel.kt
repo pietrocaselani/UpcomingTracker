@@ -14,8 +14,9 @@ class DetailsViewModel(private val movie: Movie,
     val viewState = MutableLiveData<DetailsViewState>()
 
     fun start() {
-        val disposable = repository.fetchDetails(movie.id)
-                .observeOn(schedulers.mainScheduler)
+        val fetchDetails = repository.fetchDetails(movie.id)
+
+        val disposable = fetchDetails.observeOn(schedulers.mainScheduler)
                 .doOnSubscribe {
                     viewState.postValue(DetailsViewState.Loading)
                 }.subscribe({

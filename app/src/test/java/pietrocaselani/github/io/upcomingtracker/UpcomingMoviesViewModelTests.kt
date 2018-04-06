@@ -76,7 +76,8 @@ class UpcomingMoviesViewModelTests {
         verify(observer).onChanged(UpcomingMoviesViewState.Unavailable)
     }
 
-    @Test fun when_repository_emits_error_state_should_be_error() {
+    @Test
+    fun when_repository_emits_error_state_should_be_error() {
         //Given
         lifecycle.handleLifecycleEvent(ON_RESUME)
         val errorMessage = "There is no internet connection"
@@ -90,7 +91,8 @@ class UpcomingMoviesViewModelTests {
         verify(observer).onChanged(UpcomingMoviesViewState.Error(errorMessage))
     }
 
-    @Test fun when_repository_emits_movies_state_should_be_movies_available() {
+    @Test
+    fun when_repository_emits_movies_state_should_be_movies_available() {
         //Given
         lifecycle.handleLifecycleEvent(ON_RESUME)
         val movies = listOf(movieMock(), movieMock(id = 10), movieMock(id = 30))
@@ -102,5 +104,21 @@ class UpcomingMoviesViewModelTests {
 
         //Then
         verify(observer).onChanged(UpcomingMoviesViewState.Available(movies))
+    }
+
+    @Test
+    fun when_select_movie_state_should_be_show_details() {
+        //Given
+        lifecycle.handleLifecycleEvent(ON_RESUME)
+        val movies = listOf(movieMock(), movieMock(id = 10), movieMock(id = 30))
+        Mockito.`when`(repository.fetchMovies(1)).thenReturn(Single.just(movies))
+        viewModel.viewState.observeForever(observer)
+        viewModel.start()
+
+        //When
+        viewModel.select(movieMock(id = 30))
+
+        //Then
+        verify(observer).onChanged(UpcomingMoviesViewState.ShowDetails(movieMock(id = 30)))
     }
 }
